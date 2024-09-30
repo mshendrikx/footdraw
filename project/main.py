@@ -552,7 +552,7 @@ def editteams():
             1 == 1
     else:
         min_players = players_per_team * 2
-        players = Player.query.filter(getattr(Player, "checkin") > 0)
+        players = Player.query.filter(getattr(Player, "checkin") > 0, getattr(Player, "groupid") == current_user.groupid)
         checked_players = int(players.count())
         if checked_players < min_players:
             message = "São necessários pelo menos " + str(min_players) + " jogadores para criar os times"
@@ -573,10 +573,11 @@ def editteams():
                 count += 1
                 
             max_players = total_teams * players_per_team
-            players = players.filter(getattr(Player, "checkin") <= max_players)
+            
+            players = players.filter(getattr(Player, "checkin") <= max_players, getattr(Player, "groupid") == current_user.groupid)
             
             for player in players:
-                player.random = random.randint(1, 999)
+                player.random = random.randint(1, 99999)
             db.session.commit() 
             
             for position_order in draw_order:
@@ -619,3 +620,32 @@ def delplayer(playerid):
     flash("Jogador apagado.")
     flash("alert-success")
     return redirect(url_for("main.players"))        
+
+@main.route("/order")
+@login_required
+def order():
+    
+    if current_user.groupid < 1:
+        flash("Primeiro selecionar grupo.")
+        flash("alert-danger")
+        return redirect(url_for("main.profile"))
+    
+    group = Group.query.filter_by(id=current_user.groupid).first()
+    
+    players = Player.query.filter(getattr(Player, "checkin") > 0, getattr(Player, "groupid") == current_user.groupid)
+    
+    for player in players:
+        player.random = random.randint(1, 99999)
+    
+    db.session.commit()
+    
+    players = players.order_by(Player.random)
+    
+    count = 1
+    for player in players:
+        player.random = count
+        count += 1
+    
+    db.session.commit()
+    
+    return render_template("order.html", players=players, group=group)

@@ -7,15 +7,6 @@
     </h3>
 </div>
 <div class="container border">
-    <form action="/orderplayers" method="POST">
-        <div class="input-group">
-            <input type="submit" class="btn btn-outline-primary" name="action" value="Gerar">&nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="submit" class="btn btn-outline-danger" name="action" value="Apagar">
-        </div>
-    </form>
-</div>
-<br>
-<div class="container border">
     <table class="table table-sm">
         <thead>
             <tr>
@@ -27,7 +18,7 @@
             {% for player in players %}
             <tr>
                 <td>
-                    {{ player.order }}
+                    {{ player.random }}
                 </td>
                 <td>
                     {{ player.name }}
@@ -37,3 +28,4 @@
         </tbody>
     </table>
 </div>
+{% endblock %}
