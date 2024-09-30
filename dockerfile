@@ -5,7 +5,7 @@ FROM ubuntu:22.04
 RUN apt update
 
 # Install software
-RUN apt install -y python3 python3-pip nano 
+RUN apt install -y python3 python3-pip 
 
 WORKDIR /app
 
