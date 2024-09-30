@@ -49,7 +49,7 @@ def profile():
         
         if groups_id:
             query = db.session.query(Group)
-            groups = query.filter(Group.id.in_(groups_id))
+            groups = query.filter(Group.id.in_(groups_id)).order_by(Group.name)
 
     return render_template("profile.html", current_user=current_user, groups=groups)
 
@@ -126,9 +126,9 @@ def configuration():
         flash("alert-danger")
         return redirect(url_for("main.index"))
 
-    users = User.query.all()
+    users = User.query.all().order_by(User.name)
 
-    groups = Group.query.all()
+    groups = Group.query.all().order_by(Group.name)
 
     return render_template(
         "configuration.html",
