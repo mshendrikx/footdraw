@@ -290,7 +290,7 @@ def group():
         elif draw_order.position == 3:
             position = 'Atacante'        
         elif draw_order.position == 4:
-            position = 'Overall'    
+            position = 'Geral'    
         posorder.append(position)
         posorders.append(posorder)
         count += 1
