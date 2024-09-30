@@ -54,11 +54,15 @@
                     <select name="group_selection" id="group_selection">
                         <option value=""></option>
                         {% for group in groups %}
+                        {% if group.id == current_user.groupid %}
+                        <option value="{{ group.id }}" selected>{{ group.name }}</option>
+                        {% else %}
                         <option value="{{ group.id }}">{{ group.name }}</option>
+                        {% endif %}
                         {% endfor %}
                     </select>
                     {% endif %}
-                    
+
                 </div>
             </div>
         </div>
