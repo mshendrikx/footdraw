@@ -9,9 +9,11 @@ RUN apt install -y python3 python3-pip nano
 
 WORKDIR /app
 
-COPY . .
+COPY requirements.txt .
 
 RUN pip3 install -r requirements.txt
+
+COPY . .
 
 # Expose port 7004 for web traffic
 EXPOSE 7004

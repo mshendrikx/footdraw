@@ -126,9 +126,9 @@ def configuration():
         flash("alert-danger")
         return redirect(url_for("main.index"))
 
-    users = User.query.all().order_by(User.name)
+    users = User.query.order_by(User.name).all()
 
-    groups = Group.query.all().order_by(Group.name)
+    groups = Group.query.order_by(Group.name).all()
 
     return render_template(
         "configuration.html",
