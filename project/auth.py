@@ -59,9 +59,9 @@ def recoverlogin_post():
 
     user = User.query.filter_by(
         email=email
-    ).first()  # if this returns a user, then the email already exists in database
+    ).first()  
 
-    if ( not user ):  # if a user is found, we want to redirect back to signup page so user can try again
+    if ( not user ):  
         flash("E-mail não existe no banco de dados.")
         flash("alert-danger")
     else:
