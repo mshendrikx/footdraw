@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block headscript %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+    <h3 class="title">
+        {{ group.name }}
+    </h3>
+</div><br>
+<div class="container border">
+    <br>
+    <h4 class="title">
+        Jogadores
+    </h4>
+    <br>
+    <form action="/addplayer" method="POST">
+        <div class="container-fluid">
+            <div class="input-group">
+                <input type="text" class="form-control" id="add_player" name="add_player"
+                    placeholder="Jogador">&nbsp;&nbsp;
+                <button type="submit" name="action" value="Create" class="btn btn-outline-primary">Criar</button>
+            </div>
+        </div>
+        <br>
+        <table class="table table-sm" id="sortable-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nome</th>
+                    <th>Def</th>
+                    <th>Mei</th>
+                    <th>Ata</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for player in players %}
+                <tr>
+                    <td>
+                        {% if player.checkin > 0 %}
+                        {{ player.checkin }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('main.editplayer', playerid=player.id) }}">{{ player.name }}
+                        </a>
+                    </td>
+                    <td>
+                        {% if player.defense == 1 %}
+                        <img src="{{ url_for('static', filename='images/star_1.png') }}" height="24" width="24">
+                        {% elif player.defense == 2 %}
+                        <img src="{{ url_for('static', filename='images/star_2.png') }}" height="24" width="24">
+                        {% elif player.defense == 3 %}
+                        <img src="{{ url_for('static', filename='images/star_3.png') }}" height="24" width="24">
+                        {% elif player.defense == 4 %}
+                        <img src="{{ url_for('static', filename='images/star_4.png') }}" height="24" width="24">
+                        {% elif player.defense == 5 %}
+                        <img src="{{ url_for('static', filename='images/star_5.png') }}" height="24" width="24">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/star_empty.png') }}" height="24" width="24">
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if player.midfilder == 1 %}
+                        <img src="{{ url_for('static', filename='images/star_1.png') }}" height="24" width="24">
+                        {% elif player.midfilder == 2 %}
+                        <img src="{{ url_for('static', filename='images/star_2.png') }}" height="24" width="24">
+                        {% elif player.midfilder == 3 %}
+                        <img src="{{ url_for('static', filename='images/star_3.png') }}" height="24" width="24">
+                        {% elif player.midfilder == 4 %}
+                        <img src="{{ url_for('static', filename='images/star_4.png') }}" height="24" width="24">
+                        {% elif player.midfilder == 5 %}
+                        <img src="{{ url_for('static', filename='images/star_5.png') }}" height="24" width="24">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/star_empty.png') }}" height="24" width="24">
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if player.forward == 1 %}
+                        <img src="{{ url_for('static', filename='images/star_1.png') }}" height="24" width="24">
+                        {% elif player.forward == 2 %}
+                        <img src="{{ url_for('static', filename='images/star_2.png') }}" height="24" width="24">
+                        {% elif player.forward == 3 %}
+                        <img src="{{ url_for('static', filename='images/star_3.png') }}" height="24" width="24">
+                        {% elif player.forward == 4 %}
+                        <img src="{{ url_for('static', filename='images/star_4.png') }}" height="24" width="24">
+                        {% elif player.forward == 5 %}
+                        <img src="{{ url_for('static', filename='images/star_5.png') }}" height="24" width="24">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/star_empty.png') }}" height="24" width="24">
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if player.checkin == 0 %}
+                        <a class="clickable-image" id="{{ player.id }}"
+                            href="{{ url_for('main.checkin', playerid=player.id) }}">
+                            <img src="{{ url_for('static', filename='images/icon-addlist.png') }}" height="24"
+                                width="24">
+                        </a>
+                        {% else %}
+                        <a class="clickable-image" id="{{ player.id }}"
+                            href="{{ url_for('main.checkout', playerid=player.id) }}">
+                            <img src="{{ url_for('static', filename='images/icon-delete.png') }}" height="24"
+                                width="24">
+                        </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+        <br>
+        <button type="submit" name="action" value="Clear" class="btn btn-outline-danger">Reiniciar</button>
+        <br>
+    </form>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#add_player").on("keyup", function () {
+            var searchTerm = $(this).val().toLowerCase();  // Get user input and convert to lowercase
+            $("table tr").not(":first").hide();  // Hide all table rows except header
+
+            $("table tr").filter(function () {
+                var content = $(this).text().toLowerCase();  // Get text content of each row (lowercase)
+                return content.indexOf(searchTerm) != -1;  // Check if search term is present
+            }).show();  // Show rows that match the search term
+        });
+    });
+
+</script>
+
+
+{% endblock %}

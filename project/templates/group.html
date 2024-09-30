@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-3">
+    <h3 class="title">
+        {{ group.name }}
+    </h3>
+</div><br>
+<div class="container border">
+    <br>
+    <h4 class="title">
+        Ordem do Sorteio
+    </h4>
+    <br>
+    <form action="/editgroup" method="POST">
+        <div class="container-fluid">
+            <div class="input-group">
+                <select name="position_selection" id="position_selection">
+                    <option value=""></option>
+                    <option value="1">Defesa</option>
+                    <option value="2">Meio-Campo</option>
+                    <option value="3">Ataque</option>
+                    <option value="4">Geral</option>
+                </select>
+                &nbsp;&nbsp;
+                <input type="submit" class="btn btn-outline-primary" name="action" value="Adicionar">
+            </div>
+        </div>
+        <br>
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Ordem</th>
+                    <th>Posição</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for posorder in posorders %}
+                <tr>
+                    <td>{{ posorder[0] }}</td>
+                    <td>{{ posorder[1] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <input type="submit" class="btn btn-outline-danger" name="action" value="Reiniciar"><br>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,7 @@
+*.pyc
+*.swp
+.vscode/
+.venv/
+*.env
+__pycache__/
+debug.py

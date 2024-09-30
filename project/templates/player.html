@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block headscript %}
+{% endblock %}
+
+{% block content %}
+<div class="container border">
+    <br>
+    <h3 class="title">
+        {{ player.name }}
+    </h3>
+    <br>
+    <table class="table table-sm">
+        <tbody>
+            <tr>
+                <td>
+                    Defesa
+                </td>
+                <td>
+                    <a class="clickable-image" id="d-star0"
+                        href="{{ url_for('main.updateskill', playerid=player.id, skillid=constvalue.one, skillvalue=constvalue.zero) }}">
+                        <img src="{{ url_for('static', filename='images/icon-delete.png') }}" height="24" width="24">
+                    </a>
+                </td>
+                <td></td>
+                <td>
+                    <a class="clickable-image" id="d-star1"
+                        href="{{ url_for('main.updateskill', playerid=player.id, skillid=constvalue.one, skillvalue=constvalue.one) }}">
+                        {% if player.defense > 0 %}
+                        <img src="{{ url_for('static', filename='images/star_full.png') }}" height="24" width="24">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/star_empty.png') }}" height="24" width="24">
+                        {% endif %}
+                    </a>
+                </td>
+                <td>
+                    <a class="clickable-image" id="d-star2"
+                        href="{{ url_for('main.updateskill', playerid=player.id, skillid=constvalue.one, skillvalue=constvalue.two) }}">
+                        {% if player.defense > 1 %}
+                        <img src="{{ url_for('static', filename='images/star_full.png') }}" height="24" width="24">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/star_empty.png') }}" height="24" width="24">
+                        {% endif %}
+                    </a>
+                </td>
+                <td>
+                    <a class="clickable-image" id="d-star3"
+                        href="{{ url_for('main.updateskill', playerid=player.id, skillid=constvalue.one, skillvalue=constvalue.three) }}">
+                        {% if player.defense > 2 %}
+                        <img src="{{ url_for('static', filename='images/star_full.png') }}" height="24" width="24">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/star_empty.png') }}" height="24" width="24">
+                        {% endif %}
+                    </a>
+                </td>
+                <td>
+                    <a class="clickable-image" id="d-star4"
+                        href="{{ url_for('main.updateskill', playerid=player.id, skillid=constvalue.one, skillvalue=constvalue.four) }}">
+                        {% if player.defense > 3 %}
+                        <img src="{{ url_for('static', filename='images/star_full.png') }}" height="24" width="24">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/star_empty.png') }}" height="24" width="24">
+                        {% endif %}
+                    </a>
+                </td>
+                <td>
+                    <a class="clickable-image" id="d-star5"
+                        href="{{ url_for('main.updateskill', playerid=player.id, skillid=constvalue.one, skillvalue=constvalue.five) }}">
+                        {% if player.defense > 4 %}
+                        <img src="{{ url_for('static', filename='images/star_full.png') }}" height="24" width="24">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/star_empty.png') }}" height="24" width="24">
+                        {% endif %}
+                    </a>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Meio
+                </td>
+                <td>
+                    <a class="clickable-image" id="m-star0"
+                        href="{{ url_for('main.updateskill', playerid=player.id, skillid=constvalue.two, skillvalue=constvalue.zero) }}">
+                        <img src="{{ url_for('static', filename='images/icon-delete.png') }}" height="24" width="24">
+                    </a>
+                </td>
+                <td></td>
+                <td>
+                    <a class="clickable-image" id="m-star1"
+                        href="{{ url_for('main.updateskill', playerid=player.id, skillid=constvalue.two, skillvalue=constvalue.one) }}">
+                        {% if player.midfilder > 0 %}
+                        <img src="{{ url_for('static', filename='images/star_full.png') }}" height="24" width="24">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/star_empty.png') }}" height="24" width="24">
+                        {% endif %}
+                    </a>
+                </td>
+                <td>
+                    <a class="clickable-image" id="m-star2"
+                        href="{{ url_for('main.updateskill', playerid=player.id, skillid=constvalue.two, skillvalue=constvalue.two) }}">
+                        {% if player.midfilder > 1 %}
+                        <img src="{{ url_for('static', filename='images/star_full.png') }}" height="24" width="24">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/star_empty.png') }}" height="24" width="24">
+                        {% endif %}
+                    </a>
+                </td>
+                <td>
+                    <a class="clickable-image" id="m-star3"
+                        href="{{ url_for('main.updateskill', playerid=player.id, skillid=constvalue.two, skillvalue=constvalue.three) }}">
+                        {% if player.midfilder > 2 %}
+                        <img src="{{ url_for('static', filename='images/star_full.png') }}" height="24" width="24">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/star_empty.png') }}" height="24" width="24">
+                        {% endif %}
+                    </a>
+                </td>
+                <td>
+                    <a class="clickable-image" id="m-star4"
+                        href="{{ url_for('main.updateskill', playerid=player.id, skillid=constvalue.two, skillvalue=constvalue.four) }}">
+                        {% if player.midfilder > 3 %}
+                        <img src="{{ url_for('static', filename='images/star_full.png') }}" height="24" width="24">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/star_empty.png') }}" height="24" width="24">
+                        {% endif %}
+                    </a>
+                </td>
+                <td>
+                    <a class="clickable-image" id="m-star5"
+                        href="{{ url_for('main.updateskill', playerid=player.id, skillid=constvalue.two, skillvalue=constvalue.five) }}">
+                        {% if player.midfilder > 4 %}
+                        <img src="{{ url_for('static', filename='images/star_full.png') }}" height="24" width="24">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/star_empty.png') }}" height="24" width="24">
+                        {% endif %}
+                    </a>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                    Ataque
+                </td>
+                <td>
+                    <a class="clickable-image" id="a-star0"
+                        href="{{ url_for('main.updateskill', playerid=player.id, skillid=constvalue.three, skillvalue=constvalue.zero) }}">
+                        <img src="{{ url_for('static', filename='images/icon-delete.png') }}" height="24" width="24">
+                    </a>
+                </td>
+                <td></td>
+                <td>
+                    <a class="clickable-image" id="a-star1"
+                        href="{{ url_for('main.updateskill', playerid=player.id, skillid=constvalue.three, skillvalue=constvalue.one) }}">
+                        {% if player.forward > 0 %}
+                        <img src="{{ url_for('static', filename='images/star_full.png') }}" height="24" width="24">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/star_empty.png') }}" height="24" width="24">
+                        {% endif %}
+                    </a>
+                </td>
+                <td>
+                    <a class="clickable-image" id="a-star2"
+                        href="{{ url_for('main.updateskill', playerid=player.id, skillid=constvalue.three, skillvalue=constvalue.two) }}">
+                        {% if player.forward > 1 %}
+                        <img src="{{ url_for('static', filename='images/star_full.png') }}" height="24" width="24">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/star_empty.png') }}" height="24" width="24">
+                        {% endif %}
+                    </a>
+                </td>
+                <td>
+                    <a class="clickable-image" id="a-star3"
+                        href="{{ url_for('main.updateskill', playerid=player.id, skillid=constvalue.three, skillvalue=constvalue.three) }}">
+                        {% if player.forward > 2 %}
+                        <img src="{{ url_for('static', filename='images/star_full.png') }}" height="24" width="24">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/star_empty.png') }}" height="24" width="24">
+                        {% endif %}
+                    </a>
+                </td>
+                <td>
+                    <a class="clickable-image" id="a-star4"
+                        href="{{ url_for('main.updateskill', playerid=player.id, skillid=constvalue.three, skillvalue=constvalue.four) }}">
+                        {% if player.forward > 3 %}
+                        <img src="{{ url_for('static', filename='images/star_full.png') }}" height="24" width="24">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/star_empty.png') }}" height="24" width="24">
+                        {% endif %}
+                    </a>
+                </td>
+                <td>
+                    <a class="clickable-image" id="a-star5"
+                        href="{{ url_for('main.updateskill', playerid=player.id, skillid=constvalue.three, skillvalue=constvalue.five) }}">
+                        {% if player.forward > 4 %}
+                        <img src="{{ url_for('static', filename='images/star_full.png') }}" height="24" width="24">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/star_empty.png') }}" height="24" width="24">
+                        {% endif %}
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <h4 class="title">
+        Overall: {{ player.overall }}
+    </h4>
+    <br>
+    <br>
+    <a class="clickable-image" id="{{ player.id }}" href="{{ url_for('main.delplayer', playerid=player.id) }}">
+        <img src="{{ url_for('static', filename='images/icon-delete.png') }}" height="48" width="48">
+    </a>
+    <br>
+</div>
+{% endblock %}
