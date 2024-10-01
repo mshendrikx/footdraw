@@ -642,9 +642,9 @@ def order():
     
     return render_template("order.html", players=players, group=group)
 
-@main.route("/order", methods=["POST"])
+@main.route("/orderexec", methods=["POST"])
 @login_required
-def order():
+def orderexec():
     
     if current_user.groupid < 1:
         flash("Primeiro selecionar grupo.")
