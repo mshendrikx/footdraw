@@ -588,8 +588,7 @@ def editteams():
                 elif position_order.position == 3:
                     teams.sort(key=lambda x: (x[3], x[4]))
                 else:
-                    teams.sort(key=lambda x: (x[4]))
-                    players = players.order_by(Player.overall.desc())                    
+                    teams.sort(key=lambda x: (x[4]))                                      
                 
                 for team in teams:
                     if position_order.position == 1:
