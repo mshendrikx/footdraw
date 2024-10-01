@@ -5,7 +5,7 @@ from sqlalchemy import and_
 from werkzeug.security import generate_password_hash
 from flask_login import login_required, current_user
 from . import db
-
+from footdraw import get_distinct_numbers_random
 from .models import User, Player, Group, Groupadm, Draworder
 
 class ConstValue:
@@ -366,7 +366,7 @@ def addplayer():
                 player = Player.query.filter_by(groupid=current_user.groupid, name=player_name).first()
                 
                 if player:
-                    return redirect(url_for("main.editplayer", playerid=player.id))
+                    return redirect(url_for("main.editplayer", playerid=player.id, pagefrom='players'))
         
     elif request.form["action"] == "Clear":
         players = Player.query.filter_by(groupid=current_user.groupid)
@@ -383,6 +383,7 @@ def editplayer(playerid):
     player = Player.query.filter_by(id=playerid).first()
     
     constvalue = ConstValue()
+    
     return render_template("player.html", player=player, constvalue=constvalue)
    
 @main.route("/checkin/<playerid>")
@@ -560,24 +561,29 @@ def editteams():
             flash("alert-danger")
         else:
             total_teams = checked_players // players_per_team
-            count = 1            
+            numbers_random = get_distinct_numbers_random(1, total_teams)
+
             teams = []
-            while count <= total_teams:
+            for number in numbers_random:
                 team = []
-                team.append(count)
+                team.append(number)
                 team.append(0)
                 team.append(0)
                 team.append(0)
                 team.append(0)
                 teams.append(team) 
-                count += 1
                 
             max_players = total_teams * players_per_team
             
             players = players.filter(getattr(Player, "checkin") <= max_players, getattr(Player, "groupid") == current_user.groupid)
             
+            numbers_random = get_distinct_numbers_random(1, max_players)
+            
             for player in players:
-                player.random = random.randint(1, 99999)
+                #player.random = random.randint(1, 99999)
+                player.random = numbers_random[0]
+                del numbers_random[0]
+                
             db.session.commit() 
             
             for position_order in draw_order:
@@ -660,17 +666,18 @@ def orderexec():
             player.random = 0
         players = players.order_by(Player.random, Player.name)
     else:    
+        
+        total_players = int(players.count())
+        
+        numbers_random = get_distinct_numbers_random(1, total_players)
+        
         for player in players:
-            player.random = random.randint(1, 99999)
+            player.random = numbers_random[0]
+            del numbers_random[0]
 
         db.session.commit()
 
         players = players.order_by(Player.random, Player.name)
-
-        count = 1
-        for player in players:
-            player.random = count
-            count += 1
     
     db.session.commit()
     

@@ -208,13 +208,16 @@
         Overall: {{ player.overall }}
     </h4>
     <br>
-    <a class="clickable-image" id="{{ player.id }}" href="{{ url_for('main.players', playerid=player.id) }}">
+    <a class="clickable-image" id="{{ player.id }}" href="{{ url_for('main.players') }}">
         <img src="{{ url_for('static', filename='images/icon-back.png') }}" height="48" width="48">
-    </a>   
-    <br><br><br>
+    </a>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <a class="clickable-image" id="{{ player.id }}" href="{{ url_for('main.delplayer', playerid=player.id) }}">
         <img src="{{ url_for('static', filename='images/icon-delete.png') }}" height="48" width="48">
     </a>
-    <br>
 </div>
 {% endblock %}
