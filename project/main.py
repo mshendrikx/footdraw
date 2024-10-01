@@ -634,16 +634,43 @@ def order():
     players = Player.query.filter(getattr(Player, "checkin") > 0, getattr(Player, "groupid") == current_user.groupid)
     
     for player in players:
-        player.random = random.randint(1, 99999)
+        player.random = 0
     
     db.session.commit()
     
-    players = players.order_by(Player.random)
+    players = players.order_by(Player.name)
     
-    count = 1
-    for player in players:
-        player.random = count
-        count += 1
+    return render_template("order.html", players=players, group=group)
+
+@main.route("/order", methods=["POST"])
+@login_required
+def order():
+    
+    if current_user.groupid < 1:
+        flash("Primeiro selecionar grupo.")
+        flash("alert-danger")
+        return redirect(url_for("main.profile"))
+    
+    group = Group.query.filter_by(id=current_user.groupid).first()
+    
+    players = Player.query.filter(getattr(Player, "checkin") > 0, getattr(Player, "groupid") == current_user.groupid)
+    
+    if request.form["action"] == "Apagar":
+        for player in players:
+            player.random = 0
+        players = players.order_by(Player.random, Player.name)
+    else:    
+        for player in players:
+            player.random = random.randint(1, 99999)
+
+        db.session.commit()
+
+        players = players.order_by(Player.random, Player.name)
+
+        count = 1
+        for player in players:
+            player.random = count
+            count += 1
     
     db.session.commit()
     
