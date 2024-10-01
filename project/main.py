@@ -5,7 +5,7 @@ from sqlalchemy import and_
 from werkzeug.security import generate_password_hash
 from flask_login import login_required, current_user
 from . import db
-from footdraw import get_distinct_numbers_random
+from .footdraw import get_distinct_numbers_random
 from .models import User, Player, Group, Groupadm, Draworder
 
 class ConstValue:
