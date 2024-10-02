@@ -358,7 +358,8 @@ def addplayer():
                     forward = 0,
                     overall = 0, 
                     checkin = 0,
-                    team = 0,            
+                    team = 0,       
+                    random = 0,     
                 )
                 db.session.add(new_player)
                 db.session.commit()
