@@ -7,7 +7,9 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(1000))
     admin = db.Column(db.String(1))    
     email = db.Column(db.String(100))
-    groupid = db.Column(db.Integer)    
+    groupid = db.Column(db.Integer)   
+    groupadm = db.Column(db.String(1))  
+    updplayer = db.Column(db.String(1)) 
 
 class Player(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -28,6 +30,8 @@ class Group(db.Model):
 class Groupadm(db.Model):
     groupid = db.Column(db.Integer, primary_key=True)
     userid = db.Column(db.String(100), primary_key=True)
+    admin = db.Column(db.String(1))  
+    updplayer = db.Column(db.String(1))
     
 class Draworder(db.Model):
     id = db.Column(db.Integer, primary_key=True)

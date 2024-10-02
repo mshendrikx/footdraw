@@ -3,7 +3,7 @@ import os
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user
-from .models import User
+from .models import User, Groupadm
 from .footdraw import recover_email
 from . import db
 
@@ -29,7 +29,17 @@ def login_post():
         return redirect(
             url_for("auth.login")
         )  # if the user doesn't exist or password is wrong, reload the page
-
+        
+    user.groupadm = " "
+    user.updplayer = " "   
+    group_adm = Groupadm.query.filter_by(groupid=user.groupid, userid=user.id).first()
+    if group_adm:
+        if group_adm.admin == "X":
+            user.groupadm = "X"
+            user.updplayer = "X"
+        elif group_adm.updplayer == "X":
+            user.updplayer = "X"
+            
     login_user(user, remember=remember)
     db.session.add(user)
     db.session.commit()

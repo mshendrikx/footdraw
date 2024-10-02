@@ -212,6 +212,7 @@
         <img src="{{ url_for('static', filename='images/icon-back.png') }}" height="48" width="48">
     </a>
     <br>
+    {% if current_user.updplayer == "X" %}
     <br>
     <br>
     <br>
@@ -219,5 +220,6 @@
     <a class="clickable-image" id="{{ player.id }}" href="{{ url_for('main.delplayer', playerid=player.id) }}">
         <img src="{{ url_for('static', filename='images/icon-delete.png') }}" height="48" width="48">
     </a>
+    {% endif %}
 </div>
 {% endblock %}

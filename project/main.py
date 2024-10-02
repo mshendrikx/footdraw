@@ -79,6 +79,20 @@ def profile_post():
 
     if groupid != current_user.groupid:
         current_user.groupid = groupid
+    
+    if current_user.admin == "X":
+        current_user.groupadm = "X"
+        current_user.updplayer = "X"       
+    else:        
+        current_user.groupadm = " "
+        current_user.updplayer = " "
+        group_adm = Groupadm.query.filter_by(groupid=groupid, userid=current_user.id).first()
+        if group_adm:
+            if group_adm.admin == "X":
+                current_user.groupadm = "X"
+                current_user.updplayer = "X"
+            elif current_user.updplayer == "X":
+                current_user.updplayer = "X"
 
     if name != "":
         current_user.name = name
@@ -136,7 +150,6 @@ def configuration():
         users=users,
         groups=groups,
     )
-
 
 @main.route("/delgroup", methods=["POST"])
 @login_required
@@ -265,7 +278,7 @@ def players():
             
     constvalue = ConstValue()
             
-    return render_template("players.html", group=group, players=players, constvalue=constvalue)
+    return render_template("players.html", group=group, players=players, constvalue=constvalue, current_user=current_user)
     
 @main.route("/group")
 @login_required
@@ -429,18 +442,24 @@ def checkout(playerid):
 @login_required
 def updateskill(playerid, skillid, skillvalue):
     
-    player = Player.query.filter_by(id=playerid).first()    
+    player = Player.query.filter_by(id=playerid).first()   
     
-    if skillid == '1':
-        player.defense = int(skillvalue)
-    elif skillid == '2':
-        player.midfilder = int(skillvalue)
-    else:
-        player.forward = int(skillvalue)
-        
-    player.overall = ((player.defense + player.midfilder + player.forward) * 20) / 3
-        
-    db.session.commit()   
+    if current_user.updplayer != "X":
+        flash("Sem permissão para atualizar jogador.")
+        flash("alert-danger")       
+           
+    else:         
+
+        if skillid == '1':
+            player.defense = int(skillvalue)
+        elif skillid == '2':
+            player.midfilder = int(skillvalue)
+        else:
+            player.forward = int(skillvalue)
+
+        player.overall = ((player.defense + player.midfilder + player.forward) * 20) / 3
+
+        db.session.commit()   
     
     return redirect(url_for("main.editplayer", playerid=player.id)) 
 

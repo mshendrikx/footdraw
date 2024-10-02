@@ -21,7 +21,9 @@
             <div class="input-group">
                 <input type="text" class="form-control" id="add_player" name="add_player"
                     placeholder="Jogador">&nbsp;&nbsp;
+                {% if current_user.updplayer == "X" %}
                 <button type="submit" name="action" value="Create" class="btn btn-outline-primary">Criar</button>
+                {% endif %}
             </div>
         </div>
         <br>
