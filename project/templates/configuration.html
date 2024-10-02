@@ -54,24 +54,5 @@
     </form>
     <br>
 </div>
-<br>
-<div class="container border">
-    <h3 class="fa fa-align-center" aria-hidden="true">Usuário</h3>
-    <form method="POST" action="{{ url_for('main.updateuser') }}">
-        <div class="input-group">
-            <input list="updateuserid" name="updateuserid" autocomplete="off" placeholder="Usuário" required>
-            <datalist id="updateuserid">
-                <option value=""></option>
-                {% for user in users %}
-                <option value="{{ user.id }}">{{ user.name }}</option>
-                {% endfor %}
-            </datalist>&nbsp;&nbsp;
-            <input type="submit" class="btn btn-outline-primary" name="action" value="Criar">&nbsp;&nbsp;
-            <input type="submit" class="btn btn-outline-primary" name="action" value="Admin">&nbsp;&nbsp;
-            <input type="submit" class="btn btn-outline-primary" name="action" value="Reset">&nbsp;&nbsp;
-            <input type="submit" class="btn btn-outline-danger" name="action" value="Apagar">
-        </div>
-    </form>
-    <br>
-</div>
+
 {% endblock %}

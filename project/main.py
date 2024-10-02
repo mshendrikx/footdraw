@@ -1,11 +1,12 @@
 import random
+import os
 
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from sqlalchemy import and_
 from werkzeug.security import generate_password_hash
 from flask_login import login_required, current_user
 from . import db
-from .footdraw import get_distinct_numbers_random
+from .footdraw import get_distinct_numbers_random, recover_email
 from .models import User, Player, Group, Groupadm, Draworder
 
 class ConstValue:
@@ -130,27 +131,6 @@ def creategroup():
 
     return redirect(url_for("main.configuration"))
 
-
-@main.route("/configuration")
-@login_required
-def configuration():
-
-    if current_user.admin == "":
-        flash("Só administradores podem configurar.")
-        flash("alert-danger")
-        return redirect(url_for("main.index"))
-
-    users = User.query.order_by(User.name).all()
-
-    groups = Group.query.order_by(Group.name).all()
-
-    return render_template(
-        "configuration.html",
-        current_user=current_user,
-        users=users,
-        groups=groups,
-    )
-
 @main.route("/delgroup", methods=["POST"])
 @login_required
 def delgroup():
@@ -182,74 +162,6 @@ def delgroup():
         if users:
             for user in users:
                 user.groupid = 0
-
-    db.session.commit()
-
-    return redirect(url_for("main.configuration"))
-
-
-@main.route("/updateuser", methods=["POST"])
-@login_required
-def updateuser():
-
-    if current_user.admin == "":
-        flash("Deve ser administrador.")
-        flash("alert-danger")
-        return redirect(url_for("main.index"))
-
-    userid = request.form.get("updateuserid")
-    
-    if userid == "":
-        flash("Selecionar usuário.")
-        flash("alert-danger")
-        return redirect(url_for("main.configuration"))        
-
-    if request.form["action"] == "Criar":
-        new_user = User(            
-                id=userid,
-                name="Modificar",
-                groupid=0,
-                password=generate_password_hash("F00tDr4w", method="pbkdf2:sha256"),
-                email="",
-                admin="",
-        )
-        db.session.add(new_user)
-        db.session.commit()
-        flash("Usuário criado.")
-        flash("alert-success")
-        return redirect(url_for("main.configuration"))
-
-    user = User.query.filter_by(id=userid).first()
-
-    if not user:
-        flash("Usuário não existe.")
-        flash("alert-danger")
-        return redirect(url_for("main.configuration"))
-        
-    if request.form["action"] == "Reset":
-        user.password = generate_password_hash("F00tDr4w", method="pbkdf2:sha256")
-        flash("Password modificada para: F00tDr4w")
-        flash("alert-success")
-        
-    elif request.form["action"] == "Apagar":
-        if userid == current_user.id or userid == "admin":
-            flash("Usuário não pode ser apagado.")
-            flash("alert-success")      
-        else:    
-            User.query.filter_by(id=userid).delete()  
-            Groupadm.query.filter_by(id=userid).delete() 
-            flash("Usuário apagado.")
-            flash("alert-success")
-            
-    elif request.form["action"] == "Admin":
-        if user.admin == "X":
-            flash("Administrador removido.")
-            flash("alert-success")
-            user.admin = ""
-        else:
-            flash("Administrador adicionado.")
-            flash("alert-success")
-            user.admin = "X"
 
     db.session.commit()
 
@@ -702,3 +614,159 @@ def orderexec():
     db.session.commit()
     
     return render_template("order.html", players=players, group=group)
+
+@main.route("/configuration")
+@login_required
+def configuration():
+
+    if current_user.admin == "":
+        flash("Só administradores podem configurar.")
+        flash("alert-danger")
+        return redirect(url_for("main.index"))
+
+    users = User.query.order_by(User.name).all()
+
+    groups = Group.query.order_by(Group.name).all()
+
+    return render_template(
+        "configuration.html",
+        current_user=current_user,
+        users=users,
+        groups=groups,
+    )
+    
+@main.route("/users")
+@login_required
+def users():
+    if current_user.groupadm != "X":
+        flash("Deve ser administrador do grupo")
+        flash("alert-danger")
+        return redirect(url_for("main.profile"))  
+    
+    users = User.query.order_by(User.name).all()
+    
+    return render_template("users.html", users=users, current_user=current_user)
+
+@main.route("/users", methods=["POST"])
+@login_required
+def users_post():
+    if current_user.groupadm != "X":
+        flash("Deve ser administrador do grupo")
+        flash("alert-danger")
+        return redirect(url_for("main.profile"))  
+    
+    action = request.form["action"]
+    userid = request.form.get("updateuserid")
+    
+    if action == "Criar":
+        user = User(            
+                id="",
+                name="",
+                email="",                
+        )
+        return render_template("updateuser.html", user=user)
+
+    user = User.query.filter_by(id=userid).first()
+    
+    if not user:
+        flash("Usuário não existe")
+        flash("alert-danger")
+        return redirect(url_for("main.users"))
+                   
+    if action == "Modificar":
+        return render_template("updateuser.html", user=user)     
+    elif action == "Senha":
+        password = os.urandom(5).hex()
+        if recover_email(user, password):
+            user.password = generate_password_hash(password, method="pbkdf2:sha256")
+            flash("E-mail com senha enviado.")
+            flash("alert-success")
+        else:
+            flash("Falha ao enviar E-mail com senha.")
+            flash("alert-danger")            
+    elif action == "Retirar":
+        Groupadm.query.filter_by(groupid=current_user.groupid, userid=user.id).delete()
+        flash("Usuário não faz mais parte do grupo")
+        flash("alert-success")        
+    elif action == "Apagar":
+        Groupadm.query.filter_by(groupid=current_user.groupid, userid=user.id).delete()
+        User.query.filter_by(id=user.id).delete()
+        flash("Usuário apagado")
+        flash("alert-success") 
+    
+    db.session.commit() 
+    return redirect(url_for("main.users")) 
+
+@main.route("/updateuser", methods=["POST"])
+@login_required
+def updateuser_post():
+
+    if current_user.groupadm == "":
+        flash("Deve ser administrador de grupo.")
+        flash("alert-danger")
+        return redirect(url_for("main.profile"))
+
+    userid = request.form.get("updateuserid")
+    
+    if userid == "":
+        flash("Informar usuário.")
+        flash("alert-danger")
+        return redirect(url_for("main.configuration"))        
+
+    if request.form["action"] == "Gravar":
+        name = request.form.get("name")
+        email = request.form.get("email")
+        groupadm = request.form.get("groupadm")
+        editplayers = request.form.get("editplayers")   
+         
+        user = User.query.filter_by(id=userid).first()
+        if not user:
+            user = User(            
+                    id=userid,
+            )
+            send_pass = True
+        else:
+            send_pass = False
+        
+        user.name = name
+        user.email = email
+        if groupadm == 'on':
+            user.groupadm = "X"
+            user.updplayer = "X"
+        elif editplayers == 'on':
+            user.updplayer = "X"
+        else:
+            user.groupadm = " "
+            user.updplayer = " "
+
+        if send_pass == True:
+            password = os.urandom(5).hex()
+            if recover_email(user, password):
+                user.password = generate_password_hash(password, method="pbkdf2:sha256")
+                flash("Usuário criado, E-mail com senha enviado.")
+                flash("alert-success")
+            else:
+                flash("Problema ao criar usuário.")
+                flash("alert-danger")
+                return redirect(url_for("main.users"))  
+        else:
+            flash("Usuário atualizado.")
+            flash("alert-success")            
+                         
+        db.session.add(user)        
+        
+        group_adm = Groupadm.query.filter_by(groupid=current_user.groupid, userid=user.id).first()
+        if not group_adm:
+            group_adm = Groupadm(
+                groupid=current_user.groupid,
+                userid=user.id,
+            )
+        group_adm.admin=user.groupadm
+        group_adm.updplayer=user.updplayer
+        db.session.add(group_adm)
+        db.session.commit()
+        
+        return redirect(url_for("main.users"))
+    
+    elif request.form["action"] == "Voltar":
+        return redirect(url_for("main.users"))

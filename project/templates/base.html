@@ -33,9 +33,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('main.profile') }}">Perfil</a>
                     </li>
+                    {% if current_user.groupadm == 'X' %}
                     <li class="nav-item"></li>
                         <a class="nav-link" href="{{ url_for('main.group') }}">Grupo</a>
                     </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('main.players') }}">Jogadores</a>
                     </li>
@@ -45,6 +47,11 @@
                     <li class="nav-item"></li>
                         <a class="nav-link" href="{{ url_for('main.order') }}">Bolinha</a>
                     </li>
+                    {% if current_user.groupadm == 'X' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.users') }}">Usuários</a>
+                    </li>
+                    {% endif %}
                     {% if current_user.admin == 'X' %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('main.configuration') }}">Configuração</a>

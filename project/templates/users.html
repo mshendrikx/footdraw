@@ -3,9 +3,9 @@
 {% block content %}
 <div class="container border">
     <h3 class="fa fa-align-center" aria-hidden="true">Usuário</h3>
-    <form method="POST" action="{{ url_for('main.updateuser') }}">
+    <form method="POST" action="{{ url_for('main.users') }}">
         <div class="input-group">
-            <input list="updateuserid" name="updateuserid" autocomplete="off" placeholder="Usuário" required>
+            <input list="updateuserid" name="updateuserid" autocomplete="off" placeholder="Usuário">
             <datalist id="updateuserid">
                 <option value=""></option>
                 {% for user in users %}
@@ -14,8 +14,13 @@
             </datalist>&nbsp;&nbsp;
             <input type="submit" class="btn btn-outline-primary" name="action" value="Criar">&nbsp;&nbsp;
             <input type="submit" class="btn btn-outline-primary" name="action" value="Modificar">&nbsp;&nbsp;
+            {% if current_user.groupadm == "X" %}
             <input type="submit" class="btn btn-outline-primary" name="action" value="Senha">&nbsp;&nbsp;
+            <input type="submit" class="btn btn-outline-danger" name="action" value="Retirar">&nbsp;&nbsp;            
+            {% endif %}
+            {% if current_user.admin == "X" %}
             <input type="submit" class="btn btn-outline-danger" name="action" value="Apagar">
+            {% endif %}
         </div>
     </form>
     <br>

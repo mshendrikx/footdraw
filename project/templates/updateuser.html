@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container border">
+    <br>
+    <form action="/updateuser" method="POST">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-3 text-white">
+                    <label for="updateuserid">Userid:</label>
+                </div>
+                <div class="col-9 text-white">
+                    {% if user.id == "" %}
+                    <input type="text" class="form-control" id="updateuserid" name="updateuserid" value="{{ user.id }}"
+                        autocomplete="off" required>
+                    {% else %}
+                    <input type="text" class="form-control" id="updateuserid" name="updateuserid" value="{{ user.id }}"
+                        disabled>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-3 text-white">
+                <label for="name">Nome:</label>
+            </div>
+            <div class="col-9 text-white">
+                <input type="text" class="form-control" id="name" name="name" value="{{ user.name }}" required>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-3 text-white">
+                <label for="email">E-mail:</label>
+            </div>
+            <div class="col-9 text-white">
+                <input type="text" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-3 text-white">
+                <label for="groupadm">Administrador</label>
+            </div>
+            <div class="col-9 text-white">
+                {% if user.groupadm == "X" %}
+                <input type="checkbox" id="groupadm" name="groupadm" checked>
+                {% else %}
+                <input type="checkbox" id="groupadm" name="groupadm">
+                {% endif %}
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-3 text-white">
+                <label for="editplayers">Editar Jogadores</label>
+            </div>
+            <div class="col-9 text-white">
+                {% if user.updplayer == "X" %}
+                <input type="checkbox" id="editplayers" name="editplayers" checked>
+                {% else %}
+                <input type="checkbox" id="editplayers" name="editplayers">
+                {% endif %}
+            </div>
+        </div>
+        <br>
+        <div class="input-group">
+            <input type="submit" class="btn btn-outline-primary" name="action" value="Gravar">&nbsp;&nbsp;
+            <input type="submit" class="btn btn-outline-danger" name="action" value="Voltar">
+        </div>
+    </form>
+    <br>
+</div>
+{% endblock %}
