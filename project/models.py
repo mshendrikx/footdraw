@@ -21,7 +21,8 @@ class Player(db.Model):
     overall = db.Column(db.Integer)    
     checkin = db.Column(db.Integer)
     team = db.Column(db.Integer) 
-    random = db.Column(db.Integer) 
+    random = db.Column(db.Integer)
+    position = db.Column(db.String(1))
 
 class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)

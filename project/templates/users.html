@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="container mt-3"></div>
+    <h3 class="title" style="text-align: center;">
+        {{ group.name }}
+    </h3>
+</div><br>
 <div class="container border">
     <h3 class="fa fa-align-center" aria-hidden="true">Usuário</h3>
     <form method="POST" action="{{ url_for('main.users') }}">
@@ -12,14 +17,15 @@
                 <option value="{{ user.id }}">{{ user.name }}</option>
                 {% endfor %}
             </datalist>&nbsp;&nbsp;
-            <input type="submit" class="btn btn-outline-primary" name="action" value="Criar">&nbsp;&nbsp;
+            <input type="submit" class="btn btn-outline-success" name="action" value="Criar">&nbsp;&nbsp;
             <input type="submit" class="btn btn-outline-primary" name="action" value="Modificar">&nbsp;&nbsp;
             {% if current_user.groupadm == "X" %}
-            <input type="submit" class="btn btn-outline-primary" name="action" value="Senha">&nbsp;&nbsp;
+            <input type="submit" class="btn btn-outline-warning" name="action" value="Senha">&nbsp;&nbsp;
             <input type="submit" class="btn btn-outline-danger" name="action" value="Retirar">&nbsp;&nbsp;            
             {% endif %}
             {% if current_user.admin == "X" %}
-            <input type="submit" class="btn btn-outline-danger" name="action" value="Apagar">
+            <input type="submit" class="btn btn-outline-danger" name="action" value="Apagar">&nbsp;&nbsp; 
+            <input type="submit" class="btn btn-outline-warning" name="action" value="Admin">
             {% endif %}
         </div>
     </form>

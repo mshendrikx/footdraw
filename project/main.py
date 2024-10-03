@@ -176,7 +176,7 @@ def players():
         flash("alert-danger")
         return redirect(url_for("main.profile"))
     
-    group = Group.query.filter_by(id=current_user.groupid)
+    group = Group.query.filter_by(id=current_user.groupid).first()
     
     players_db = Player.query.filter_by(groupid=current_user.groupid).order_by(Player.checkin, Player.name)
     
@@ -495,7 +495,7 @@ def editteams():
             total_teams = checked_players // players_per_team
             numbers_random = get_distinct_numbers_random(1, total_teams)
 
-            teams = []
+            teams = [] 
             for number in numbers_random:
                 team = []
                 team.append(number)
@@ -520,12 +520,16 @@ def editteams():
             
             for position_order in draw_order:
                 if position_order.position == 1:
+                    player_pos = "D"
                     teams.sort(key=lambda x: (x[1], x[4]))
                 elif position_order.position == 2:
+                    player_pos = "M"
                     teams.sort(key=lambda x: (x[2], x[4]))
                 elif position_order.position == 3:
+                    player_pos = "A"
                     teams.sort(key=lambda x: (x[3], x[4]))
                 else:
+                    player_pos = "G"
                     teams.sort(key=lambda x: (x[4]))                                      
                 
                 for team in teams:
@@ -539,6 +543,7 @@ def editteams():
                         player = players.order_by(Player.overall.desc(), Player.random).first()                    
 
                     player.team = team[0]
+                    player.position = player_pos
                     db.session.commit() 
                     team[1] += player.defense
                     team[2] += player.midfilder
@@ -645,7 +650,9 @@ def users():
     
     users = User.query.order_by(User.name).all()
     
-    return render_template("users.html", users=users, current_user=current_user)
+    group = Group.query.filter_by(id=current_user.groupid).first()
+    
+    return render_template("users.html", users=users, current_user=current_user, group=group)
 
 @main.route("/users", methods=["POST"])
 @login_required
@@ -657,6 +664,11 @@ def users_post():
     
     action = request.form["action"]
     userid = request.form.get("updateuserid")
+    
+    if userid == current_user.id:
+        flash("Usuário ativo não pode ser editado")
+        flash("alert-danger")
+        return redirect(url_for("main.users"))          
     
     if action == "Criar":
         user = User(            
@@ -693,7 +705,16 @@ def users_post():
         User.query.filter_by(id=user.id).delete()
         flash("Usuário apagado")
         flash("alert-success") 
-    
+    elif action == "Admin":
+        user = User.query.filter_by(id=user.id).first()
+        if user.admin == "X":
+            user.admin = " "
+            flash("Usuário não é mais um administrador")
+        else:
+            user.admin = "X"
+            flash("Usuário agora é um administrador")
+        flash("alert-warning") 
+            
     db.session.commit() 
     return redirect(url_for("main.users")) 
 

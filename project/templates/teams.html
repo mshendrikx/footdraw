@@ -53,6 +53,7 @@
     <table class="table table-sm">
         <thead>
             <tr>
+                <th>Pos</th>
                 <th>Jogadores:</th>
                 <th>Def</th>
                 <th>Mei</th>
@@ -64,6 +65,9 @@
             {% for player in players %}
             {% if player.team == team.id %}
             <tr>
+                <td>
+                    {{ player.position }}
+                </td>
                 <td>
                     <a href="{{ url_for('main.editplayer', playerid=player.id) }}">{{ player.name }}
                     </a>
